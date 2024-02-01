@@ -59,15 +59,40 @@ module PlankFrontPanel(){
 }
 
 // BoundingBox();
-BackPanel();
-translate([0, DEPTH_BACKPANEL, 0]){
-    PlankTop();
-    PlankSide();
-    translate([WIDTH_BBOX - PLANK_THICKNESS, 0, 0]){
+module BasicCabinet(){
+    BackPanel();
+    translate([0, DEPTH_BACKPANEL, 0]){
+        PlankTop();
         PlankSide();
-    }
-    PlankFrontPanel();
-    translate([0, 0, BBOX_TOP - HEIGHT_FRONTPANEL]){
+        translate([WIDTH_BBOX - PLANK_THICKNESS, 0, 0]){
+            PlankSide();
+        }
         PlankFrontPanel();
+        translate([0, 0, BBOX_TOP - HEIGHT_FRONTPANEL]){
+            PlankFrontPanel();
+        }
     }
 }
+
+BackPanel();
+
+points = [[0,0,0], [0, 0, HEIGHT_BBOX], [WIDTH_BBOX, 0, HEIGHT_BBOX - (PLANK_THICKNESS * 0.5)], [WIDTH_BBOX, 0, 0]];
+echo(points);
+
+module Nail(coords){
+    let (x=coords[0])
+    let (y=coords[1])
+    let (z=coords[2])
+    translate(coords){
+        color("red")
+            cylinder(r=2, h=PLANK_THICKNESS);
+    }
+}
+
+module NailsOnFrame(xyz_list){
+    for (xyz = xyz_list){
+        Nail(xyz);
+    }
+}
+
+NailsOnFrame(points);
