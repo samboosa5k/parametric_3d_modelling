@@ -1,29 +1,81 @@
-// CABINET BBOX
-CABINET_X = 1000;
-CABINET_Y = 300;
-CABINET_Z = 1000;
+// COLORS
+WOOD = "#BA8C63";
+WOOD_DARK = "#8B4513";
+WOOD_OAK = "#A0522D";
+WOOD_LIGHT_OAK = "#D2B48C";
+WOOD_DARK_BOARD = "#8B4513";
 
-PLANK_Z = 18;
+// CABINET BBOX
+DRAWERS_BASE_X = 622;
+DRAWERS_BASE_Y= 300;
+DRAWERS_BASE_Z = 810;
+
+DRAWERS_SIDEPLANK_X = 16;
+DRAWERS_SIDEPLANK_Y = 300;
+DRAWERS_SIDEPLANK_Z = 810;
+
+DRAWERS_TOPPLANK_X = DRAWERS_BASE_X - 2 * DRAWERS_SIDEPLANK_X;
+DRAWERS_TOPPLANK_Y = 300;
+DRAWERS_TOPPLANK_Z = 16;
+DRAWERS_TOPPLANK_Z_OFFSET = DRAWERS_BASE_Z - DRAWERS_TOPPLANK_Z - 5;
+
+module DrawersBase(){
+    color(WOOD, 1){
+        // SIDE PLANKS
+        cube([DRAWERS_SIDEPLANK_X, DRAWERS_SIDEPLANK_Y, DRAWERS_SIDEPLANK_Z]);
+        translate([DRAWERS_BASE_X - DRAWERS_SIDEPLANK_X, 0, 0]){
+            cube([DRAWERS_SIDEPLANK_X, DRAWERS_SIDEPLANK_Y, DRAWERS_SIDEPLANK_Z]);
+        }
+        // TOP PLANK
+        translate([DRAWERS_SIDEPLANK_X, 0, DRAWERS_TOPPLANK_Z_OFFSET]){
+            cube([DRAWERS_TOPPLANK_X, DRAWERS_TOPPLANK_Y, DRAWERS_TOPPLANK_Z]);
+        }
+    }
+
+    // FRONT DRAWERS
+    color(WOOD,1){
+        translate([DRAWERS_SIDEPLANK_X, 0, 0]){
+            cube([DRAWERS_BASE_X - DRAWERS_SIDEPLANK_X * 2, DRAWERS_BASE_Y, DRAWERS_TOPPLANK_Z_OFFSET]);
+        }
+    }
+    
+}
+
+PLANK_X = 1000 - (1000 - DRAWERS_BASE_X);
 PLANK_Y = 300;
+PLANK_Z = 18;
 
 SIDEPLANK_Y = 300;
 SIDEPLANK_X = 18;
 SIDEPLANK_Z = 1000;
 
-BACKBOARD_X = 1000;
+BACKBOARD_X = 1000 - (1000 - DRAWERS_BASE_X);
 BACKBOARD_Y = 10;
-BACKBOARD_Z = 1000;
+BACKBOARD_Z = 1000 + PLANK_Z;
 
-
-
-linear_extrude(BACKBOARD_Z, center=false, convexity = 1, slices = 1, scale =1.0){    
-    square([BACKBOARD_X, BACKBOARD_Y],      center= true);
+module MyCabinet(){
+    color(WOOD_LIGHT_OAK,1){
+        // SIDE PLANKS
+        cube([SIDEPLANK_X, SIDEPLANK_Y, SIDEPLANK_Z]);
+        translate([DRAWERS_BASE_X - SIDEPLANK_X, 0, 0]){
+            cube([SIDEPLANK_X, SIDEPLANK_Y, SIDEPLANK_Z]);
+        }
+    }
+    color(WOOD_LIGHT_OAK,1){
+        // TOP PLANK
+        translate([0, 0, SIDEPLANK_Z]){
+            cube([PLANK_X, PLANK_Y, PLANK_Z]);
+        }
+    }
+    // BACKBOARD
+    color(WOOD_DARK, 1){    
+        translate([0, -BACKBOARD_Y, 0]){
+            cube([BACKBOARD_X, BACKBOARD_Y, BACKBOARD_Z]);
+        }
+    }
 }
-     
-linear_extrude(PLANK_Z, center=false, convexity = 1, slices = 1, scale =1.0){    
-    square([CABINET_X, CABINET_Y], center = true);    
-}
 
-linear_extrude(SIDEPLANK_Z, center=false, convexity = 1, slices = 1, scale =1.0){    
-    square([SIDEPLANK_X, SIDEPLANK_Y],      center= true);
+DrawersBase();
+translate([0, 0, DRAWERS_BASE_Z]){
+    MyCabinet();
 }

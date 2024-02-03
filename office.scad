@@ -10,7 +10,7 @@ module createDeskBlock(dimensions) {
     module emptySpace() {
         translate([0, dimensions[1], 0])
             color("orchid", 0.5)
-                cube(dimensions);
+                desk();
     }
 
     desk();

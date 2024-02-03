@@ -73,6 +73,7 @@ module BasicCabinet(){
         }
     }
 }
+BasicCabinet();
 
 BackPanel();
 
@@ -95,4 +96,4 @@ module NailsOnFrame(xyz_list){
     }
 }
 
-NailsOnFrame(points);
+//NailsOnFrame(points);
